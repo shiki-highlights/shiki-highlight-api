@@ -277,7 +277,7 @@ Load a custom TextMate grammar.
 
 This project was inspired by:
 - [Blog post by Pavi Gupta](https://pavi2410.com/blog/high-performance-syntax-highlighting-with-css-highlights-api/)
-- Real-world performance issues on [Code198x.com](https://code198x.stevehill.xyz)
+- Real-world performance issues on [Code198x](https://code198x.stevehill.xyz)
 
 ## Contributing
 
