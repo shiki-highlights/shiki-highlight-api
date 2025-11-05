@@ -16,7 +16,7 @@
   "homepage": "https://github.com/stevehill1981/shiki-highlight-api#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/stevehill1981/shiki-highlight-api.git"
+    "url": "git+https://github.com/stevehill1981/shiki-highlight-api.git"
   },
   "bugs": {
     "url": "https://github.com/stevehill1981/shiki-highlight-api/issues"
