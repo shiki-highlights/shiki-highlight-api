@@ -35,9 +35,7 @@ test.describe('Range creation in browser', () => {
     await page.waitForTimeout(100);
 
     // Check for Range creation errors
-    const rangeErrors = consoleErrors.filter((msg) =>
-      msg.includes('Range creation failed')
-    );
+    const rangeErrors = consoleErrors.filter((msg) => msg.includes('Range creation failed'));
     expect(rangeErrors).toHaveLength(0);
 
     // Verify highlights were created
@@ -80,9 +78,7 @@ test.describe('Range creation in browser', () => {
     await page.setContent(html);
     await page.waitForTimeout(100);
 
-    const rangeErrors = consoleErrors.filter((msg) =>
-      msg.includes('Range creation failed')
-    );
+    const rangeErrors = consoleErrors.filter((msg) => msg.includes('Range creation failed'));
     expect(rangeErrors).toHaveLength(0);
 
     const highlightCount = await page.evaluate(() => {
@@ -127,9 +123,7 @@ test.describe('Range creation in browser', () => {
 
     // This combination would have caught the bug - line numbers + diff markers
     // means firstChild was definitely wrong
-    const rangeErrors = consoleErrors.filter((msg) =>
-      msg.includes('Range creation failed')
-    );
+    const rangeErrors = consoleErrors.filter((msg) => msg.includes('Range creation failed'));
     expect(rangeErrors).toHaveLength(0);
 
     const highlightCount = await page.evaluate(() => {
