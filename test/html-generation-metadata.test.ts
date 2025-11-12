@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { codeToHighlightHtml } from '../src/index';
+import type { Element } from 'hast';
 
 describe('HTML Generation with Metadata', () => {
   it('generates basic HTML without metadata (fast path)', async () => {
@@ -127,7 +128,7 @@ describe('HTML Generation with Metadata', () => {
   it('generates HTML with custom transformers', async () => {
     const customTransformer = {
       name: 'test-transformer',
-      line(node: any) {
+      line(node: Element) {
         node.properties = node.properties || {};
         node.properties['data-custom'] = 'test-value';
       },

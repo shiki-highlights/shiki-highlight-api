@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { extractMetadata } from '../src/metadata-extraction';
-import type { Root as HastRoot, Element } from 'hast';
+import type { Root as HastRoot } from 'hast';
 
 describe('extractMetadata', () => {
   it('returns empty metadata for simple code without transformer classes', () => {

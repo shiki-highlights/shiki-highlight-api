@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { buildTransformers } from '../src/transformer-builder';
 import type { HighlightOptions } from '../src/index';
+import type { Element } from 'hast';
 
 describe('buildTransformers', () => {
   it('returns empty array when no transformer options provided', () => {
@@ -15,7 +16,7 @@ describe('buildTransformers', () => {
   it('returns user-provided transformers when given', () => {
     const customTransformer = {
       name: 'custom-transformer',
-      pre(node: any) {
+      pre(node: Element) {
         node.properties = node.properties || {};
         node.properties['data-custom'] = 'true';
       },
