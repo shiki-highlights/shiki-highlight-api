@@ -48,7 +48,7 @@ function extractMetadata(hast: HastRoot): Metadata {
     diffLines: { added: new Set<number>(), removed: new Set<number>() },
     focusLines: new Set<number>(),
     lineClasses: new Map<number, string[]>(),
-    lineStyles: new Map<number, Record<string, string>>()
+    lineStyles: new Map<number, Record<string, string>>(),
   };
 
   visit(hast, 'element', (node) => {
@@ -95,7 +95,7 @@ function codeToHighlightHtml(code: string, options: HighlightOptions) {
   const transformers = buildTransformers(options);
 
   if (transformers.length === 0) {
-    return generateFastPath(code, options);  // Current implementation
+    return generateFastPath(code, options); // Current implementation
   }
 
   return generateWithMetadata(code, options, transformers);
@@ -117,8 +117,8 @@ export interface HighlightOptions {
 
   // Convenience options (converted to transformers internally)
   lineNumbers?: boolean | { start?: number };
-  highlightLines?: number[] | string;  // [1,3,5] or "1,3,5-7"
-  diffLines?: { added?: number[], removed?: number[] };
+  highlightLines?: number[] | string; // [1,3,5] or "1,3,5-7"
+  diffLines?: { added?: number[]; removed?: number[] };
   focusLines?: number[];
 }
 ```
@@ -130,13 +130,13 @@ Example usage:
 const result = await codeToHighlightHtml(code, {
   lang: 'javascript',
   lineNumbers: true,
-  highlightLines: [1, 3, 5]
+  highlightLines: [1, 3, 5],
 });
 
 // Advanced
 const result = await codeToHighlightHtml(code, {
   lang: 'javascript',
-  transformers: [myCustomTransformer()]
+  transformers: [myCustomTransformer()],
 });
 ```
 
@@ -146,7 +146,7 @@ const result = await codeToHighlightHtml(code, {
 export interface RemarkHighlightApiOptions {
   theme?: string;
   loadLanguages?: () => Promise<void>;
-  parseMetaString?: boolean;  // default: true
+  parseMetaString?: boolean; // default: true
   transformers?: ShikiTransformer[];
 }
 ```
@@ -155,11 +155,12 @@ Meta strings work automatically:
 
 ````markdown
 ```javascript {1-3,5} showLineNumbers
-function hello() {    // highlighted
-  console.log('hi');  // highlighted
-}                     // highlighted
-                      // not highlighted
-console.log('done');  // highlighted (line 5)
+function hello() {
+  // highlighted
+  console.log('hi'); // highlighted
+} // highlighted
+// not highlighted
+console.log('done'); // highlighted (line 5)
 ```
 ````
 
@@ -179,46 +180,49 @@ Enhanced structure with metadata applied:
 function generateHtml(code: string, blockId: string, metadata?: Metadata): string {
   const lines = code.split('\n');
 
-  const linesHtml = lines.map((line, i) => {
-    const lineNum = i + 1;
-    const lineId = `${blockId}-L${i}`;
+  const linesHtml = lines
+    .map((line, i) => {
+      const lineNum = i + 1;
+      const lineId = `${blockId}-L${i}`;
 
-    // Build classes
-    const classes = ['line'];
-    if (metadata?.highlightedLines.has(lineNum)) classes.push('highlighted');
-    if (metadata?.diffLines.added.has(lineNum)) classes.push('diff', 'add');
-    if (metadata?.diffLines.removed.has(lineNum)) classes.push('diff', 'remove');
-    if (metadata?.focusLines.size > 0 && !metadata.focusLines.has(lineNum)) {
-      classes.push('blurred');
-    }
+      // Build classes
+      const classes = ['line'];
+      if (metadata?.highlightedLines.has(lineNum)) classes.push('highlighted');
+      if (metadata?.diffLines.added.has(lineNum)) classes.push('diff', 'add');
+      if (metadata?.diffLines.removed.has(lineNum)) classes.push('diff', 'remove');
+      if (metadata?.focusLines.size > 0 && !metadata.focusLines.has(lineNum)) {
+        classes.push('blurred');
+      }
 
-    const escaped = escapeHtml(line);
-    let lineContent = '';
+      const escaped = escapeHtml(line);
+      let lineContent = '';
 
-    // Add diff marker
-    if (metadata?.diffLines.added.has(lineNum)) {
-      lineContent += '<span class="diff-marker">+</span>';
-    } else if (metadata?.diffLines.removed.has(lineNum)) {
-      lineContent += '<span class="diff-marker">-</span>';
-    }
+      // Add diff marker
+      if (metadata?.diffLines.added.has(lineNum)) {
+        lineContent += '<span class="diff-marker">+</span>';
+      } else if (metadata?.diffLines.removed.has(lineNum)) {
+        lineContent += '<span class="diff-marker">-</span>';
+      }
 
-    // Add line number
-    if (metadata?.lineNumbers) {
-      const start = metadata.lineNumbers.start || 1;
-      lineContent += `<span class="line-number">${start + i}</span>`;
-    }
+      // Add line number
+      if (metadata?.lineNumbers) {
+        const start = metadata.lineNumbers.start || 1;
+        lineContent += `<span class="line-number">${start + i}</span>`;
+      }
 
-    // Add code
-    lineContent += `<span class="line-content">${escaped}</span>`;
+      // Add code
+      lineContent += `<span class="line-content">${escaped}</span>`;
 
-    return `<span id="${lineId}" class="${classes.join(' ')}">${lineContent}</span>`;
-  }).join('\n');
+      return `<span id="${lineId}" class="${classes.join(' ')}">${lineContent}</span>`;
+    })
+    .join('\n');
 
   return `<pre class="shiki" data-highlight-block="${blockId}"><code>${linesHtml}</code></pre>`;
 }
 ```
 
 **DOM Node Count (200 lines with all features):**
+
 - Base: 200 line spans
 - Line numbers: +200 = 400 total
 - Diff markers on 10 lines: +10 = 410 total
@@ -341,12 +345,14 @@ try {
 **Version:** 0.1.x → 1.0.0
 
 **Why v1.0.0:**
+
 - Graduation from beta (0.x) to stable
 - Feature-complete with transformer support
 - Production-ready with 100% test coverage
 - Signals: "This is the official stable release"
 
 **Breaking Changes:**
+
 - API remains backward compatible
 - Fast path unchanged (no transformers = existing behavior)
 - Package exports may be cleaned up (remove internal functions)

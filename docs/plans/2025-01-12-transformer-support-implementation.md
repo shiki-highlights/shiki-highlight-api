@@ -13,12 +13,14 @@
 ## Task 1: Add HAST Dependencies and Types
 
 **Files:**
+
 - Modify: `package.json`
 - Create: `src/metadata.ts`
 
 **Step 1: Add HAST dependency**
 
 Add to package.json dependencies:
+
 ```json
 {
   "dependencies": {
@@ -34,6 +36,7 @@ Run: `npm install`
 **Step 2: Create metadata types file**
 
 Create `src/metadata.ts`:
+
 ```typescript
 /**
  * Metadata extracted from HAST tree for applying to Highlight API output
@@ -88,12 +91,14 @@ git commit -m "feat: add HAST dependencies and metadata types"
 ## Task 2: Implement HAST Metadata Extraction
 
 **Files:**
+
 - Modify: `src/metadata.ts`
 - Create: `test/metadata-extraction.test.ts`
 
 **Step 1: Write test for basic metadata extraction**
 
 Create `test/metadata-extraction.test.ts`:
+
 ```typescript
 import { describe, it, expect } from 'vitest';
 import { extractMetadata } from '../src/metadata';
@@ -119,33 +124,33 @@ describe('extractMetadata', () => {
                   tagName: 'span',
                   properties: {
                     class: ['line', 'highlighted'],
-                    'data-line': '1'
+                    'data-line': '1',
                   },
-                  children: []
+                  children: [],
                 },
                 {
                   type: 'element',
                   tagName: 'span',
                   properties: {
                     class: ['line'],
-                    'data-line': '2'
+                    'data-line': '2',
                   },
-                  children: []
+                  children: [],
                 },
                 {
                   type: 'element',
                   tagName: 'span',
                   properties: {
                     class: ['line', 'highlighted'],
-                    'data-line': '3'
+                    'data-line': '3',
                   },
-                  children: []
-                }
-              ]
-            }
-          ]
-        }
-      ]
+                  children: [],
+                },
+              ],
+            },
+          ],
+        },
+      ],
     };
 
     const metadata = extractMetadata(hast);
@@ -172,24 +177,24 @@ describe('extractMetadata', () => {
                   tagName: 'span',
                   properties: {
                     class: ['line', 'diff', 'add'],
-                    'data-line': '1'
+                    'data-line': '1',
                   },
-                  children: []
+                  children: [],
                 },
                 {
                   type: 'element',
                   tagName: 'span',
                   properties: {
                     class: ['line', 'diff', 'remove'],
-                    'data-line': '2'
+                    'data-line': '2',
                   },
-                  children: []
-                }
-              ]
-            }
-          ]
-        }
-      ]
+                  children: [],
+                },
+              ],
+            },
+          ],
+        },
+      ],
     };
 
     const metadata = extractMetadata(hast);
@@ -217,24 +222,24 @@ describe('extractMetadata', () => {
                   tagName: 'span',
                   properties: {
                     class: ['line', 'focused'],
-                    'data-line': '1'
+                    'data-line': '1',
                   },
-                  children: []
+                  children: [],
                 },
                 {
                   type: 'element',
                   tagName: 'span',
                   properties: {
                     class: ['line'],
-                    'data-line': '2'
+                    'data-line': '2',
                   },
-                  children: []
-                }
-              ]
-            }
-          ]
-        }
-      ]
+                  children: [],
+                },
+              ],
+            },
+          ],
+        },
+      ],
     };
 
     const metadata = extractMetadata(hast);
@@ -261,15 +266,15 @@ describe('extractMetadata', () => {
                   tagName: 'span',
                   properties: {
                     class: ['line'],
-                    'data-line': '1'
+                    'data-line': '1',
                   },
-                  children: []
-                }
-              ]
-            }
-          ]
-        }
-      ]
+                  children: [],
+                },
+              ],
+            },
+          ],
+        },
+      ],
     };
 
     const metadata = extractMetadata(hast);
@@ -290,6 +295,7 @@ Expected: FAIL - extractMetadata function not found
 **Step 3: Implement extractMetadata function**
 
 Add to `src/metadata.ts`:
+
 ```typescript
 import { visit } from 'unist-util-visit';
 import type { Root, Element } from 'hast';
@@ -352,8 +358,8 @@ export function extractMetadata(hast: Root): Metadata {
 function parseInlineStyles(styleString: string): Record<string, string> {
   const styles: Record<string, string> = {};
 
-  styleString.split(';').forEach(rule => {
-    const [prop, value] = rule.split(':').map(s => s.trim());
+  styleString.split(';').forEach((rule) => {
+    const [prop, value] = rule.split(':').map((s) => s.trim());
     if (prop && value) {
       styles[prop] = value;
     }
@@ -380,11 +386,13 @@ git commit -m "feat: implement HAST metadata extraction"
 ## Task 3: Update HighlightOptions Interface
 
 **Files:**
+
 - Modify: `src/index.ts`
 
 **Step 1: Add new options to interface**
 
 In `src/index.ts`, update the HighlightOptions interface:
+
 ```typescript
 import type { ShikiTransformer } from 'shiki';
 
@@ -427,12 +435,14 @@ git commit -m "feat: add transformer options to HighlightOptions interface"
 ## Task 4: Implement Line Number Parser
 
 **Files:**
+
 - Create: `src/line-parser.ts`
 - Create: `test/line-parser.test.ts`
 
 **Step 1: Write tests for line number parsing**
 
 Create `test/line-parser.test.ts`:
+
 ```typescript
 import { describe, it, expect } from 'vitest';
 import { parseLineNumbers } from '../src/line-parser';
@@ -481,6 +491,7 @@ Expected: FAIL - parseLineNumbers not found
 **Step 3: Implement parseLineNumbers function**
 
 Create `src/line-parser.ts`:
+
 ```typescript
 /**
  * Parse line numbers from array or string format
@@ -497,12 +508,12 @@ export function parseLineNumbers(input: number[] | string): number[] {
 
   const lines = new Set<number>();
 
-  input.split(',').forEach(part => {
+  input.split(',').forEach((part) => {
     const trimmed = part.trim();
 
     if (trimmed.includes('-')) {
       // Range: "1-3"
-      const [start, end] = trimmed.split('-').map(n => parseInt(n.trim()));
+      const [start, end] = trimmed.split('-').map((n) => parseInt(n.trim()));
       if (!isNaN(start) && !isNaN(end)) {
         for (let i = start; i <= end; i++) {
           lines.add(i);
@@ -538,12 +549,14 @@ git commit -m "feat: implement line number parser"
 ## Task 5: Implement buildTransformers Helper
 
 **Files:**
+
 - Create: `src/transformer-builder.ts`
 - Create: `test/transformer-builder.test.ts`
 
 **Step 1: Write tests for transformer builder**
 
 Create `test/transformer-builder.test.ts`:
+
 ```typescript
 import { describe, it, expect } from 'vitest';
 import { buildTransformers } from '../src/transformer-builder';
@@ -552,7 +565,7 @@ import type { HighlightOptions } from '../src/index';
 describe('buildTransformers', () => {
   it('returns empty array when no transformer options', () => {
     const options: HighlightOptions = {
-      lang: 'javascript'
+      lang: 'javascript',
     };
 
     const transformers = buildTransformers(options);
@@ -564,7 +577,7 @@ describe('buildTransformers', () => {
     const customTransformer = { name: 'custom' };
     const options: HighlightOptions = {
       lang: 'javascript',
-      transformers: [customTransformer as any]
+      transformers: [customTransformer as any],
     };
 
     const transformers = buildTransformers(options);
@@ -575,7 +588,7 @@ describe('buildTransformers', () => {
   it('converts lineNumbers option to transformer', () => {
     const options: HighlightOptions = {
       lang: 'javascript',
-      lineNumbers: true
+      lineNumbers: true,
     };
 
     const transformers = buildTransformers(options);
@@ -587,7 +600,7 @@ describe('buildTransformers', () => {
   it('converts highlightLines array to transformer', () => {
     const options: HighlightOptions = {
       lang: 'javascript',
-      highlightLines: [1, 3, 5]
+      highlightLines: [1, 3, 5],
     };
 
     const transformers = buildTransformers(options);
@@ -598,7 +611,7 @@ describe('buildTransformers', () => {
   it('converts highlightLines string to transformer', () => {
     const options: HighlightOptions = {
       lang: 'javascript',
-      highlightLines: '1,3,5-7'
+      highlightLines: '1,3,5-7',
     };
 
     const transformers = buildTransformers(options);
@@ -611,8 +624,8 @@ describe('buildTransformers', () => {
       lang: 'javascript',
       diffLines: {
         added: [1, 3],
-        removed: [2, 4]
-      }
+        removed: [2, 4],
+      },
     };
 
     const transformers = buildTransformers(options);
@@ -623,7 +636,7 @@ describe('buildTransformers', () => {
   it('converts focusLines to transformer', () => {
     const options: HighlightOptions = {
       lang: 'javascript',
-      focusLines: [1, 2, 3]
+      focusLines: [1, 2, 3],
     };
 
     const transformers = buildTransformers(options);
@@ -636,7 +649,7 @@ describe('buildTransformers', () => {
       lang: 'javascript',
       lineNumbers: true,
       highlightLines: [1, 3],
-      diffLines: { added: [5] }
+      diffLines: { added: [5] },
     };
 
     const transformers = buildTransformers(options);
@@ -654,6 +667,7 @@ Expected: FAIL - buildTransformers not found
 **Step 3: Implement buildTransformers function**
 
 Create `src/transformer-builder.ts`:
+
 ```typescript
 import type { ShikiTransformer } from 'shiki';
 import type { HighlightOptions } from './index';
@@ -694,9 +708,7 @@ export function buildTransformers(options: HighlightOptions): ShikiTransformer[]
 /**
  * Create transformer for line numbers
  */
-function createLineNumberTransformer(
-  lineNumbers: boolean | { start?: number }
-): ShikiTransformer {
+function createLineNumberTransformer(lineNumbers: boolean | { start?: number }): ShikiTransformer {
   const start = typeof lineNumbers === 'object' ? lineNumbers.start || 1 : 1;
 
   return {
@@ -704,7 +716,7 @@ function createLineNumberTransformer(
     line(node, line) {
       node.properties['data-line'] = String(line);
       return node;
-    }
+    },
   };
 }
 
@@ -724,7 +736,7 @@ function createHighlightLinesTransformer(lines: number[]): ShikiTransformer {
         }
       }
       return node;
-    }
+    },
   };
 }
 
@@ -754,7 +766,7 @@ function createDiffTransformer(diffLines: {
         }
       }
       return node;
-    }
+    },
   };
 }
 
@@ -774,7 +786,7 @@ function createFocusTransformer(lines: number[]): ShikiTransformer {
         }
       }
       return node;
-    }
+    },
   };
 }
 ```
@@ -796,12 +808,14 @@ git commit -m "feat: implement transformer builder"
 ## Task 6: Update HTML Generation with Metadata
 
 **Files:**
+
 - Modify: `src/index.ts`
 - Create: `test/html-generation-metadata.test.ts`
 
 **Step 1: Write tests for HTML generation with metadata**
 
 Create `test/html-generation-metadata.test.ts`:
+
 ```typescript
 import { describe, it, expect } from 'vitest';
 import { codeToHighlightHtml } from '../src/index';
@@ -811,7 +825,7 @@ describe('HTML generation with metadata', () => {
     const code = 'const x = 1;\nconst y = 2;';
     const result = await codeToHighlightHtml(code, {
       lang: 'javascript',
-      lineNumbers: true
+      lineNumbers: true,
     });
 
     expect(result.html).toContain('line-number');
@@ -823,7 +837,7 @@ describe('HTML generation with metadata', () => {
     const code = 'const x = 1;';
     const result = await codeToHighlightHtml(code, {
       lang: 'javascript',
-      lineNumbers: { start: 5 }
+      lineNumbers: { start: 5 },
     });
 
     expect(result.html).toContain('>5</span>');
@@ -833,7 +847,7 @@ describe('HTML generation with metadata', () => {
     const code = 'line1\nline2\nline3';
     const result = await codeToHighlightHtml(code, {
       lang: 'text',
-      highlightLines: [1, 3]
+      highlightLines: [1, 3],
     });
 
     expect(result.html).toContain('class="line highlighted"');
@@ -843,7 +857,7 @@ describe('HTML generation with metadata', () => {
     const code = 'line1\nline2';
     const result = await codeToHighlightHtml(code, {
       lang: 'text',
-      diffLines: { added: [1] }
+      diffLines: { added: [1] },
     });
 
     expect(result.html).toContain('diff add');
@@ -854,7 +868,7 @@ describe('HTML generation with metadata', () => {
     const code = 'line1\nline2';
     const result = await codeToHighlightHtml(code, {
       lang: 'text',
-      diffLines: { removed: [2] }
+      diffLines: { removed: [2] },
     });
 
     expect(result.html).toContain('diff remove');
@@ -865,7 +879,7 @@ describe('HTML generation with metadata', () => {
     const code = 'line1\nline2\nline3';
     const result = await codeToHighlightHtml(code, {
       lang: 'text',
-      focusLines: [1, 2]
+      focusLines: [1, 2],
     });
 
     expect(result.html).toContain('blurred');
@@ -876,7 +890,7 @@ describe('HTML generation with metadata', () => {
     const result = await codeToHighlightHtml(code, {
       lang: 'text',
       lineNumbers: true,
-      highlightLines: [1]
+      highlightLines: [1],
     });
 
     expect(result.html).toContain('line-number');
@@ -886,7 +900,7 @@ describe('HTML generation with metadata', () => {
   it('uses fast path when no transformer options', async () => {
     const code = 'const x = 1;';
     const result = await codeToHighlightHtml(code, {
-      lang: 'javascript'
+      lang: 'javascript',
     });
 
     expect(result.html).not.toContain('line-number');
@@ -903,6 +917,7 @@ Expected: FAIL - HTML does not contain metadata classes
 **Step 3: Update generateHtml function**
 
 In `src/index.ts`, update the `generateHtml` function to accept metadata:
+
 ```typescript
 import type { Metadata } from './metadata';
 
@@ -937,7 +952,7 @@ function generateHtml(code: string, blockId: string, metadata?: Metadata): strin
         // Add custom classes from transformers
         const customClasses = metadata.lineClasses.get(lineNum);
         if (customClasses) {
-          customClasses.forEach(cls => {
+          customClasses.forEach((cls) => {
             if (!classes.includes(cls)) {
               classes.push(cls);
             }
@@ -966,7 +981,8 @@ function generateHtml(code: string, blockId: string, metadata?: Metadata): strin
 
       // Add line number if enabled
       if (metadata && metadata.lineNumbers) {
-        const start = typeof metadata.lineNumbers === 'object' ? metadata.lineNumbers.start || 1 : 1;
+        const start =
+          typeof metadata.lineNumbers === 'object' ? metadata.lineNumbers.start || 1 : 1;
         lineContent += `<span class="line-number">${start + i}</span>`;
       }
 
@@ -984,6 +1000,7 @@ function generateHtml(code: string, blockId: string, metadata?: Metadata): strin
 **Step 4: Update codeToHighlightHtml to use hybrid path**
 
 In `src/index.ts`, update `codeToHighlightHtml`:
+
 ```typescript
 import { buildTransformers } from './transformer-builder';
 import { extractMetadata } from './metadata';
@@ -1091,12 +1108,14 @@ git commit -m "feat: update HTML generation with metadata support"
 ## Task 7: Update CSS Generation with Metadata
 
 **Files:**
+
 - Modify: `src/index.ts`
 - Create: `test/css-generation-metadata.test.ts`
 
 **Step 1: Write tests for CSS generation with metadata**
 
 Create `test/css-generation-metadata.test.ts`:
+
 ```typescript
 import { describe, it, expect } from 'vitest';
 import { codeToHighlightHtml } from '../src/index';
@@ -1106,7 +1125,7 @@ describe('CSS generation with metadata', () => {
     const code = 'const x = 1;';
     const result = await codeToHighlightHtml(code, {
       lang: 'javascript',
-      lineNumbers: true
+      lineNumbers: true,
     });
 
     expect(result.css).toContain('.line-number');
@@ -1117,7 +1136,7 @@ describe('CSS generation with metadata', () => {
     const code = 'line1\nline2';
     const result = await codeToHighlightHtml(code, {
       lang: 'text',
-      highlightLines: [1]
+      highlightLines: [1],
     });
 
     expect(result.css).toContain('.highlighted');
@@ -1128,7 +1147,7 @@ describe('CSS generation with metadata', () => {
     const code = 'line1\nline2';
     const result = await codeToHighlightHtml(code, {
       lang: 'text',
-      diffLines: { added: [1], removed: [2] }
+      diffLines: { added: [1], removed: [2] },
     });
 
     expect(result.css).toContain('.diff.add');
@@ -1140,7 +1159,7 @@ describe('CSS generation with metadata', () => {
     const code = 'line1\nline2';
     const result = await codeToHighlightHtml(code, {
       lang: 'text',
-      focusLines: [1]
+      focusLines: [1],
     });
 
     expect(result.css).toContain('.blurred');
@@ -1152,7 +1171,7 @@ describe('CSS generation with metadata', () => {
     const result = await codeToHighlightHtml(code, {
       lang: 'text',
       blockId: 'test-block',
-      highlightLines: [1]
+      highlightLines: [1],
     });
 
     expect(result.css).toContain('[data-highlight-block="test-block"]');
@@ -1162,7 +1181,7 @@ describe('CSS generation with metadata', () => {
     const code = 'const x = 1;';
     const result = await codeToHighlightHtml(code, {
       lang: 'javascript',
-      lineNumbers: true
+      lineNumbers: true,
     });
 
     expect(result.css).toContain('::highlight(');
@@ -1178,6 +1197,7 @@ Expected: FAIL - CSS does not contain metadata styles
 **Step 3: Update generateCss function**
 
 In `src/index.ts`, update the `generateCss` function:
+
 ```typescript
 function generateCss(
   tokens: ThemedToken[][],
@@ -1208,18 +1228,21 @@ function generateCss(
   if (metadata) {
     // Line highlighting styles
     if (metadata.highlightedLines.size > 0) {
-      lineStyles.push(`
+      lineStyles.push(
+        `
 [data-highlight-block="${blockId}"] .line.highlighted {
   background-color: rgba(255, 255, 0, 0.1);
   border-left: 3px solid rgba(255, 255, 0, 0.5);
   padding-left: 0.5em;
 }
-      `.trim());
+      `.trim()
+      );
     }
 
     // Diff line styles
     if (metadata.diffLines.added.size > 0 || metadata.diffLines.removed.size > 0) {
-      lineStyles.push(`
+      lineStyles.push(
+        `
 [data-highlight-block="${blockId}"] .line.diff.add {
   background-color: rgba(0, 255, 0, 0.1);
 }
@@ -1239,22 +1262,26 @@ function generateCss(
 [data-highlight-block="${blockId}"] .line.diff.remove .diff-marker {
   color: #ef4444;
 }
-      `.trim());
+      `.trim()
+      );
     }
 
     // Focus/blur styles
     if (metadata.focusLines.size > 0) {
-      lineStyles.push(`
+      lineStyles.push(
+        `
 [data-highlight-block="${blockId}"] .line.blurred {
   opacity: 0.3;
   filter: blur(0.5px);
 }
-      `.trim());
+      `.trim()
+      );
     }
 
     // Line number styles
     if (metadata.lineNumbers) {
-      lineStyles.push(`
+      lineStyles.push(
+        `
 [data-highlight-block="${blockId}"] .line-number {
   display: inline-block;
   width: 3ch;
@@ -1263,7 +1290,8 @@ function generateCss(
   color: #6e7681;
   user-select: none;
 }
-      `.trim());
+      `.trim()
+      );
     }
 
     // Custom line styles
@@ -1272,16 +1300,18 @@ function generateCss(
         const styleStr = Object.entries(styles)
           .map(([prop, val]) => `${prop}: ${val}`)
           .join('; ');
-        lineStyles.push(`
+        lineStyles.push(
+          `
 [data-highlight-block="${blockId}"] #${blockId}-L${lineNum - 1} {
   ${styleStr}
 }
-        `.trim());
+        `.trim()
+        );
       });
     }
   }
 
-  const allStyles = [tokenRules, ...lineStyles].filter(s => s).join('\n');
+  const allStyles = [tokenRules, ...lineStyles].filter((s) => s).join('\n');
 
   return `<style data-highlight-styles="${blockId}">\n${allStyles}\n</style>`;
 }
@@ -1304,11 +1334,13 @@ git commit -m "feat: update CSS generation with metadata styles"
 ## Task 8: Add Integration Tests
 
 **Files:**
+
 - Create: `test/integration.test.ts`
 
 **Step 1: Write integration tests**
 
 Create `test/integration.test.ts`:
+
 ```typescript
 import { describe, it, expect } from 'vitest';
 import { codeToHighlightHtml } from '../src/index';
@@ -1325,7 +1357,7 @@ describe('Integration tests', () => {
       lineNumbers: true,
       highlightLines: [1, 4],
       diffLines: { added: [2] },
-      focusLines: [1, 2]
+      focusLines: [1, 2],
     });
 
     // Check HTML
@@ -1350,7 +1382,7 @@ describe('Integration tests', () => {
 
     const result = await codeToHighlightHtml(code, {
       lang: 'text',
-      highlightLines: [1, 999] // 999 doesn't exist
+      highlightLines: [1, 999], // 999 doesn't exist
     });
 
     // Should not throw, should only highlight valid lines
@@ -1363,7 +1395,7 @@ describe('Integration tests', () => {
 
     const result = await codeToHighlightHtml(code, {
       lang: 'text',
-      lineNumbers: true
+      lineNumbers: true,
     });
 
     expect(result.html).toBeDefined();
@@ -1375,7 +1407,7 @@ describe('Integration tests', () => {
 
     const start = performance.now();
     await codeToHighlightHtml(code, {
-      lang: 'javascript'
+      lang: 'javascript',
     });
     const fastTime = performance.now() - start;
 
@@ -1387,7 +1419,7 @@ describe('Integration tests', () => {
 
     const result = await codeToHighlightHtml(code, {
       lang: 'text',
-      highlightLines: '1,3,5-7'
+      highlightLines: '1,3,5-7',
     });
 
     // Should highlight lines 1, 3, 5 (7 doesn't exist)
@@ -1395,7 +1427,9 @@ describe('Integration tests', () => {
   });
 
   it('exports all public APIs', async () => {
-    const { codeToHighlightHtml, codeToHtmlFallback, loadCustomLanguage } = await import('../src/index');
+    const { codeToHighlightHtml, codeToHtmlFallback, loadCustomLanguage } = await import(
+      '../src/index'
+    );
 
     expect(typeof codeToHighlightHtml).toBe('function');
     expect(typeof codeToHtmlFallback).toBe('function');
@@ -1421,6 +1455,7 @@ git commit -m "test: add integration tests for transformer support"
 ## Task 9: Run Full Test Suite
 
 **Files:**
+
 - None (verification only)
 
 **Step 1: Run all tests**
@@ -1436,6 +1471,7 @@ Expected: 100% coverage maintained
 **Step 3: If coverage drops, identify gaps**
 
 If coverage is not 100%, run:
+
 ```bash
 npm run test:coverage -- --reporter=verbose
 ```
@@ -1454,13 +1490,14 @@ git commit -m "test: achieve 100% coverage for transformer support"
 ## Task 10: Update Documentation
 
 **Files:**
+
 - Modify: `README.md`
 
 **Step 1: Update README with transformer examples**
 
 Add to README.md after the "Quick Start" section:
 
-```markdown
+````markdown
 ## Transformer Support (v1.0.0)
 
 ### Line Numbers
@@ -1468,28 +1505,29 @@ Add to README.md after the "Quick Start" section:
 ```typescript
 const result = await codeToHighlightHtml(code, {
   lang: 'javascript',
-  lineNumbers: true
+  lineNumbers: true,
 });
 
 // Or start from specific line
 const result = await codeToHighlightHtml(code, {
   lang: 'javascript',
-  lineNumbers: { start: 5 }
+  lineNumbers: { start: 5 },
 });
 ```
+````
 
 ### Line Highlighting
 
 ```typescript
 const result = await codeToHighlightHtml(code, {
   lang: 'javascript',
-  highlightLines: [1, 3, 5]  // Array
+  highlightLines: [1, 3, 5], // Array
 });
 
 // Or string syntax
 const result = await codeToHighlightHtml(code, {
   lang: 'javascript',
-  highlightLines: '1,3,5-7'  // String with ranges
+  highlightLines: '1,3,5-7', // String with ranges
 });
 ```
 
@@ -1500,8 +1538,8 @@ const result = await codeToHighlightHtml(code, {
   lang: 'javascript',
   diffLines: {
     added: [2, 4],
-    removed: [6, 8]
-  }
+    removed: [6, 8],
+  },
 });
 ```
 
@@ -1510,7 +1548,7 @@ const result = await codeToHighlightHtml(code, {
 ```typescript
 const result = await codeToHighlightHtml(code, {
   lang: 'javascript',
-  focusLines: [1, 2, 3]  // These stay in focus, others dimmed
+  focusLines: [1, 2, 3], // These stay in focus, others dimmed
 });
 ```
 
@@ -1521,10 +1559,7 @@ import { transformerNotationHighlight } from '@shikijs/transformers';
 
 const result = await codeToHighlightHtml(code, {
   lang: 'javascript',
-  transformers: [
-    transformerNotationHighlight(),
-    myCustomTransformer()
-  ]
+  transformers: [transformerNotationHighlight(), myCustomTransformer()],
 });
 ```
 
@@ -1536,29 +1571,32 @@ const result = await codeToHighlightHtml(code, {
   lineNumbers: true,
   highlightLines: [1, 3],
   diffLines: { added: [5] },
-  focusLines: [1, 2, 3]
+  focusLines: [1, 2, 3],
 });
 ```
-```
+
+````
 
 **Step 2: Commit**
 
 ```bash
 git add README.md
 git commit -m "docs: add transformer support examples to README"
-```
+````
 
 ---
 
 ## Task 11: Prepare for v1.0.0 Release
 
 **Files:**
+
 - Modify: `package.json`
 - Create: `CHANGELOG.md`
 
 **Step 1: Update version in package.json**
 
 Update version to 1.0.0:
+
 ```json
 {
   "version": "1.0.0"
@@ -1568,12 +1606,14 @@ Update version to 1.0.0:
 **Step 2: Create CHANGELOG**
 
 Create `CHANGELOG.md`:
+
 ```markdown
 # Changelog
 
 ## [1.0.0] - 2025-01-12
 
 ### Added
+
 - Full Shiki transformer support
 - Line numbers with customizable start
 - Line highlighting with range syntax (1,3,5-7)
@@ -1583,15 +1623,18 @@ Create `CHANGELOG.md`:
 - Meta string parsing in remark plugin
 
 ### Changed
+
 - Graduated from 0.x (experimental) to 1.0.0 (stable)
 - API remains 100% backward compatible
 - Fast path preserved (no transformers = no overhead)
 
 ### Performance
+
 - Maintains 80-90% DOM node reduction vs traditional Shiki
 - Zero overhead for code without transformers
 
 ## [0.1.2] - Previous release
+
 ...
 ```
 
@@ -1607,12 +1650,14 @@ git commit -m "chore: bump version to 1.0.0"
 ## Task 12: Update Remark Plugin (Meta String Parsing)
 
 **Files:**
+
 - Modify: `../remark-shiki-highlight-api/src/index.ts`
 - Create: `../remark-shiki-highlight-api/test/meta-parsing.test.ts`
 
 **Step 1: Write tests for meta string parsing**
 
 Create `../remark-shiki-highlight-api/test/meta-parsing.test.ts`:
+
 ```typescript
 import { describe, it, expect } from 'vitest';
 import { parseCodeMeta } from '../src/meta-parser';
@@ -1620,38 +1665,38 @@ import { parseCodeMeta } from '../src/meta-parser';
 describe('parseCodeMeta', () => {
   it('parses line highlight syntax', () => {
     expect(parseCodeMeta('{1,3,5}')).toEqual({
-      highlightLines: [1, 3, 5]
+      highlightLines: [1, 3, 5],
     });
   });
 
   it('parses line range syntax', () => {
     expect(parseCodeMeta('{1-3}')).toEqual({
-      highlightLines: [1, 2, 3]
+      highlightLines: [1, 2, 3],
     });
   });
 
   it('parses showLineNumbers flag', () => {
     expect(parseCodeMeta('showLineNumbers')).toEqual({
-      lineNumbers: true
+      lineNumbers: true,
     });
   });
 
   it('parses lineNumberStart', () => {
     expect(parseCodeMeta('lineNumberStart=5')).toEqual({
-      lineNumbers: { start: 5 }
+      lineNumbers: { start: 5 },
     });
   });
 
   it('parses combined meta string', () => {
     expect(parseCodeMeta('{1-3} showLineNumbers')).toEqual({
       highlightLines: [1, 2, 3],
-      lineNumbers: true
+      lineNumbers: true,
     });
   });
 
   it('ignores unknown attributes', () => {
     expect(parseCodeMeta('title="app.js" {1-2}')).toEqual({
-      highlightLines: [1, 2]
+      highlightLines: [1, 2],
     });
   });
 
@@ -1671,6 +1716,7 @@ Expected: FAIL - parseCodeMeta not found
 **Step 3: Implement meta parser**
 
 Create `../remark-shiki-highlight-api/src/meta-parser.ts`:
+
 ```typescript
 /**
  * Parse meta string from markdown code block
@@ -1715,12 +1761,12 @@ export function parseCodeMeta(meta: string | null | undefined): {
 function parseLineNumbers(input: string): number[] {
   const lines = new Set<number>();
 
-  input.split(',').forEach(part => {
+  input.split(',').forEach((part) => {
     const trimmed = part.trim();
 
     if (trimmed.includes('-')) {
       // Range: "1-3"
-      const [start, end] = trimmed.split('-').map(n => parseInt(n.trim()));
+      const [start, end] = trimmed.split('-').map((n) => parseInt(n.trim()));
       if (!isNaN(start) && !isNaN(end)) {
         for (let i = start; i <= end; i++) {
           lines.add(i);
@@ -1747,6 +1793,7 @@ Expected: PASS - all tests pass
 **Step 5: Update remark plugin to use meta parser**
 
 In `../remark-shiki-highlight-api/src/index.ts`, update to parse meta strings:
+
 ```typescript
 import { parseCodeMeta } from './meta-parser';
 
@@ -1777,7 +1824,7 @@ export function remarkHighlightApi(options: RemarkHighlightApiOptions = {}) {
           lang,
           theme,
           blockId,
-          ...metaOptions  // Merge parsed meta options
+          ...metaOptions, // Merge parsed meta options
         });
 
         // (rest of code block processing...)
@@ -1792,12 +1839,13 @@ export function remarkHighlightApi(options: RemarkHighlightApiOptions = {}) {
 **Step 6: Add interface for new options**
 
 Update `RemarkHighlightApiOptions` interface:
+
 ```typescript
 export interface RemarkHighlightApiOptions {
   theme?: string;
   loadLanguages?: () => Promise<void>;
-  parseMetaString?: boolean;  // NEW: default true
-  transformers?: ShikiTransformer[];  // NEW: pass through
+  parseMetaString?: boolean; // NEW: default true
+  transformers?: ShikiTransformer[]; // NEW: pass through
 }
 ```
 
@@ -1819,12 +1867,14 @@ git commit -m "feat: add meta string parsing for transformer options"
 ## Task 13: Add Remark Plugin Integration Tests
 
 **Files:**
+
 - Create: `../remark-shiki-highlight-api/test/meta-integration.test.ts`
 
 **Step 1: Write integration tests for meta strings**
 
 Create `../remark-shiki-highlight-api/test/meta-integration.test.ts`:
-```typescript
+
+````typescript
 import { describe, it, expect } from 'vitest';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
@@ -1894,7 +1944,7 @@ describe('Meta string integration', () => {
     expect(html).not.toContain('highlighted');
   });
 });
-```
+````
 
 **Step 2: Run test to verify it passes**
 
@@ -1914,13 +1964,14 @@ git commit -m "test: add meta string integration tests"
 ## Task 14: Update Remark Plugin Documentation
 
 **Files:**
+
 - Modify: `../remark-shiki-highlight-api/README.md`
 
 **Step 1: Add meta string documentation**
 
 Add to README after usage section:
 
-```markdown
+`````markdown
 ## Meta String Support
 
 The plugin automatically parses meta strings from code blocks:
@@ -1938,6 +1989,9 @@ const z = 3;
 const a = 4;
 ```
 ````
+`````
+
+`````
 
 ### Line Numbers
 
@@ -1946,14 +2000,14 @@ const a = 4;
 const x = 1;  // Shows line numbers
 const y = 2;
 ```
-````
+`````
 
 Or start from specific line:
 
 ````markdown
 ```javascript lineNumberStart=5
-const x = 1;  // Line number shows 5
-const y = 2;  // Line number shows 6
+const x = 1; // Line number shows 5
+const y = 2; // Line number shows 6
 ```
 ````
 
@@ -1961,9 +2015,9 @@ const y = 2;  // Line number shows 6
 
 ````markdown
 ```javascript {1-2} showLineNumbers
-const x = 1;  // Highlighted with line number
-const y = 2;  // Highlighted with line number
-const z = 3;  // Not highlighted but has line number
+const x = 1; // Highlighted with line number
+const y = 2; // Highlighted with line number
+const z = 3; // Not highlighted but has line number
 ```
 ````
 
@@ -1972,13 +2026,12 @@ const z = 3;  // Not highlighted but has line number
 ```javascript
 export default defineConfig({
   markdown: {
-    remarkPlugins: [
-      [remarkHighlightApi, { parseMetaString: false }]
-    ]
-  }
+    remarkPlugins: [[remarkHighlightApi, { parseMetaString: false }]],
+  },
 });
 ```
-```
+
+````
 
 **Step 2: Commit**
 
@@ -1986,19 +2039,21 @@ export default defineConfig({
 cd ../remark-shiki-highlight-api
 git add README.md
 git commit -m "docs: add meta string support documentation"
-```
+````
 
 ---
 
 ## Task 15: Version Bump Remark Plugin
 
 **Files:**
+
 - Modify: `../remark-shiki-highlight-api/package.json`
 - Create: `../remark-shiki-highlight-api/CHANGELOG.md`
 
 **Step 1: Update version to 1.0.0**
 
 Update `../remark-shiki-highlight-api/package.json`:
+
 ```json
 {
   "version": "1.0.0"
@@ -2008,29 +2063,34 @@ Update `../remark-shiki-highlight-api/package.json`:
 **Step 2: Create CHANGELOG**
 
 Create `../remark-shiki-highlight-api/CHANGELOG.md`:
+
 ```markdown
 # Changelog
 
 ## [1.0.0] - 2025-01-12
 
 ### Added
+
 - Meta string parsing (enabled by default)
 - Automatic line highlighting from `{1-3}` syntax
 - Line numbers from `showLineNumbers` flag
 - Custom line number start from `lineNumberStart=N`
 
 ### Changed
+
 - Upgraded shiki-highlight-api to v1.0.0
 - Graduated to stable v1.0.0 release
 - API remains 100% backward compatible
 
 ## [0.2.1] - Previous release
+
 ...
 ```
 
 **Step 3: Update dependency version**
 
 In `../remark-shiki-highlight-api/package.json`, update dependency:
+
 ```json
 {
   "dependencies": {

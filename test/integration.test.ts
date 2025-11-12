@@ -161,9 +161,7 @@ describe('Integration Tests', () => {
       });
 
       // Custom transformer should add 'custom-marker' class to line 2
-      const line2 = result.html
-        .split('\n')
-        .find((l) => l.includes('test-custom-L1'));
+      const line2 = result.html.split('\n').find((l) => l.includes('test-custom-L1'));
       expect(line2).toContain('custom-marker');
     });
 
