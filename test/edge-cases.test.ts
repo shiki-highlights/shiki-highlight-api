@@ -176,6 +176,17 @@ describe('Edge Cases', () => {
       expect(html).toContain('<span');
       expect(html).toContain('const');
     });
+
+    it('fallback uses default theme when not provided', async () => {
+      const code = 'const x = 42;';
+      const html = await codeToHtmlFallback(code, {
+        lang: 'javascript',
+        // No theme provided - should default to 'dark-plus'
+      });
+
+      expect(html).toContain('<span');
+      expect(html).toContain('const');
+    });
   });
 
   describe('Very long content', () => {
