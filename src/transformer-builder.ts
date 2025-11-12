@@ -52,8 +52,12 @@ function createLineNumberTransformer(config: boolean | { start?: number }): Shik
     name: 'highlight-api-line-numbers',
     line(node: Element, line: number) {
       node.properties = node.properties || {};
+      node.properties['data-line'] = line;
       node.properties['data-line-number'] = start + line - 1;
       const classes = Array.isArray(node.properties.class) ? node.properties.class : [];
+      if (!classes.includes('line')) {
+        classes.push('line');
+      }
       if (!classes.includes('line-numbered')) {
         classes.push('line-numbered');
       }
@@ -69,14 +73,18 @@ function createHighlightLinesTransformer(lines: Set<number>): ShikiTransformer {
   return {
     name: 'highlight-api-highlight-lines',
     line(node: Element, line: number) {
+      node.properties = node.properties || {};
+      node.properties['data-line'] = line;
+      const classes = Array.isArray(node.properties.class) ? node.properties.class : [];
+      if (!classes.includes('line')) {
+        classes.push('line');
+      }
       if (lines.has(line)) {
-        node.properties = node.properties || {};
-        const classes = Array.isArray(node.properties.class) ? node.properties.class : [];
         if (!classes.includes('highlighted')) {
           classes.push('highlighted');
         }
-        node.properties.class = classes;
       }
+      node.properties.class = classes;
     },
   };
 }
@@ -94,10 +102,15 @@ function createDiffLinesTransformer(config: {
   return {
     name: 'highlight-api-diff-lines',
     line(node: Element, line: number) {
-      if (added.has(line) || removed.has(line)) {
-        node.properties = node.properties || {};
-        const classes = Array.isArray(node.properties.class) ? node.properties.class : [];
+      node.properties = node.properties || {};
+      node.properties['data-line'] = line;
+      const classes = Array.isArray(node.properties.class) ? node.properties.class : [];
 
+      if (!classes.includes('line')) {
+        classes.push('line');
+      }
+
+      if (added.has(line) || removed.has(line)) {
         if (!classes.includes('diff')) {
           classes.push('diff');
         }
@@ -109,9 +122,9 @@ function createDiffLinesTransformer(config: {
         if (removed.has(line) && !classes.includes('remove')) {
           classes.push('remove');
         }
-
-        node.properties.class = classes;
       }
+
+      node.properties.class = classes;
     },
   };
 }
@@ -123,14 +136,18 @@ function createFocusLinesTransformer(lines: Set<number>): ShikiTransformer {
   return {
     name: 'highlight-api-focus-lines',
     line(node: Element, line: number) {
+      node.properties = node.properties || {};
+      node.properties['data-line'] = line;
+      const classes = Array.isArray(node.properties.class) ? node.properties.class : [];
+      if (!classes.includes('line')) {
+        classes.push('line');
+      }
       if (lines.has(line)) {
-        node.properties = node.properties || {};
-        const classes = Array.isArray(node.properties.class) ? node.properties.class : [];
         if (!classes.includes('focused')) {
           classes.push('focused');
         }
-        node.properties.class = classes;
       }
+      node.properties.class = classes;
     },
   };
 }

@@ -14,14 +14,40 @@ export function extractMetadata(hast: HastRoot): Metadata {
     if (node.tagName !== 'span') return;
 
     const classes = getClassArray(node.properties.class);
-    if (!classes.includes('line')) return;
 
-    // Get line number from data-line attribute
+    // Get line number from data-line attribute (added by Shiki)
     const dataLine = node.properties['data-line'];
-    if (dataLine === undefined || dataLine === null) return;
+
+    // If no data-line, check if this might be a line element via other indicators
+    if (dataLine === undefined || dataLine === null) {
+      // If we have line-numbered, process it even without data-line
+      if (classes.includes('line-numbered')) {
+        const dataLineNumber = node.properties['data-line-number'];
+        if (dataLineNumber !== undefined) {
+          const actualNumber = parseInt(String(dataLineNumber), 10);
+          if (!isNaN(actualNumber)) {
+            metadata.lineNumbers = { start: 1 }; // Default to starting at 1
+          }
+        }
+      }
+      return;
+    }
 
     const lineNum = parseInt(String(dataLine), 10);
     if (isNaN(lineNum) || lineNum <= 0) return;
+
+    // Detect line numbers feature
+    if (classes.includes('line-numbered')) {
+      const dataLineNumber = node.properties['data-line-number'];
+      if (dataLineNumber !== undefined) {
+        const actualNumber = parseInt(String(dataLineNumber), 10);
+        if (!isNaN(actualNumber)) {
+          // Calculate start number (first line number - first line index)
+          const start = actualNumber - (lineNum - 1);
+          metadata.lineNumbers = { start };
+        }
+      }
+    }
 
     // Extract semantic information from classes
     if (classes.includes('highlighted')) {
