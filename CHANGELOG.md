@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2025-01-12
+
+### Fixed
+
+- **Critical**: Fixed Range creation errors when line numbers or diff markers are present
+  - Script now correctly finds `.line-content` element instead of using `firstChild`
+  - Resolves "IndexSizeError: The index is not in the allowed range" errors
+  - Affects code blocks with `lineNumbers` or `diffLines` options
+
+### Added
+
+- **Browser Testing**: Playwright-based browser tests for JavaScript execution
+  - Tests verify Range creation with line numbers and diff markers
+  - Would have caught this bug before release
+  - Complements existing 135 unit tests with 4 browser tests
+
+### Technical Details
+
+- Updated JavaScript to query for `.line-content` element before creating Range objects
+- Ensures highlight ranges are applied to the correct text node containing code
+- Added Playwright test infrastructure for future browser-specific testing
+
 ## [1.0.0] - 2025-01-12
 
 ### Added
