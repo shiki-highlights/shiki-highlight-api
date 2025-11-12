@@ -12,6 +12,7 @@ import {
   type BundledLanguage,
   type Highlighter,
   type LanguageRegistration,
+  type ShikiTransformer,
 } from 'shiki';
 import type { ThemedToken } from 'shiki';
 
@@ -64,6 +65,20 @@ export interface HighlightOptions {
   theme?: string;
   /** Optional unique block ID (auto-generated if omitted) */
   blockId?: string;
+
+  // Transformer support
+  /** Shiki transformers for custom code processing */
+  transformers?: ShikiTransformer[];
+
+  // Convenience options (converted to transformers internally)
+  /** Enable line numbers. Pass true for default (starting at 1), or { start: number } to customize */
+  lineNumbers?: boolean | { start?: number };
+  /** Lines to highlight. Can be array [1,3,5] or string "1,3,5-7" */
+  highlightLines?: number[] | string;
+  /** Lines showing diff additions/removals */
+  diffLines?: { added?: number[]; removed?: number[] };
+  /** Lines to focus (blurs other lines) */
+  focusLines?: number[];
 }
 
 /**
@@ -320,4 +335,4 @@ export async function createCustomHighlighter(options: {
 }
 
 // Re-export types from Shiki for convenience
-export type { Highlighter, BundledLanguage, ThemedToken };
+export type { Highlighter, BundledLanguage, ThemedToken, ShikiTransformer };
