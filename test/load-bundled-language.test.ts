@@ -18,6 +18,43 @@ describe('loadBundledLanguage', () => {
     expect(result.stats.tokens).toBeGreaterThan(0);
   });
 
+  it('loads a language with custom aliases', async () => {
+    // Load Python with 'py' alias
+    await loadBundledLanguage('python', ['py']);
+
+    // Verify both 'python' and 'py' work
+    const pythonResult = await codeToHighlightHtml('print("test")', {
+      lang: 'python',
+      theme: 'dark-plus',
+      blockId: 'python-alias-test',
+    });
+
+    const pyResult = await codeToHighlightHtml('print("test")', {
+      lang: 'py',
+      theme: 'dark-plus',
+      blockId: 'py-alias-test',
+    });
+
+    expect(pythonResult.html).toContain('print');
+    expect(pyResult.html).toContain('print');
+    expect(pythonResult.stats.tokens).toBeGreaterThan(0);
+    expect(pyResult.stats.tokens).toBeGreaterThan(0);
+  });
+
+  it('supports empty aliases array', async () => {
+    // Empty aliases should work fine
+    await loadBundledLanguage('rust', []);
+
+    const rustResult = await codeToHighlightHtml('fn main() {}', {
+      lang: 'rust',
+      theme: 'dark-plus',
+      blockId: 'rust-empty-alias-test',
+    });
+
+    expect(rustResult.html).toContain('fn main');
+    expect(rustResult.stats.tokens).toBeGreaterThan(0);
+  });
+
   it('loads multiple bundled languages', async () => {
     // Load multiple languages
     await loadBundledLanguage('rust');
