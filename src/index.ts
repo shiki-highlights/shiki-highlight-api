@@ -183,6 +183,24 @@ export async function loadCustomLanguage(grammar: LanguageRegistration): Promise
 }
 
 /**
+ * Load a bundled language from Shiki
+ *
+ * @example
+ * ```typescript
+ * await loadBundledLanguage('python');
+ * await loadBundledLanguage('rust');
+ * await loadBundledLanguage('go');
+ * ```
+ */
+export async function loadBundledLanguage(lang: BundledLanguage): Promise<void> {
+  const highlighter = await getHighlighter();
+  const langModule = await bundledLanguages[lang]();
+  // Type assertion needed because bundledLanguages returns module format
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await highlighter.loadLanguage(langModule as any);
+}
+
+/**
  * Generate clean HTML with single text node per line
  */
 function generateHtml(code: string, blockId: string, metadata?: Metadata): string {
