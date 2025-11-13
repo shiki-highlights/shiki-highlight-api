@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { codeToHighlightHtml, loadCustomLanguage } from '../src/index';
+import { codeToHighlightHtml } from '../src/index';
 
 describe('Singleton Highlighter - Concurrency Safety', () => {
   beforeEach(() => {
