@@ -183,21 +183,45 @@ export async function loadCustomLanguage(grammar: LanguageRegistration): Promise
 }
 
 /**
- * Load a bundled language from Shiki
+ * Load a bundled language from Shiki with optional aliases
+ *
+ * @param lang - The bundled language to load
+ * @param aliases - Optional array of additional aliases for the language.
+ *                  Note: Aliases are added to the language registration and may
+ *                  be recognized by Shiki in certain contexts. Most bundled languages
+ *                  already have common aliases (e.g., 'py' for 'python').
  *
  * @example
  * ```typescript
+ * // Load without aliases
  * await loadBundledLanguage('python');
- * await loadBundledLanguage('rust');
- * await loadBundledLanguage('go');
+ *
+ * // Load with custom aliases (useful for compatibility or custom naming)
+ * await loadBundledLanguage('python', ['py3', 'python3']);
+ * await loadBundledLanguage('javascript', ['js']);
  * ```
  */
-export async function loadBundledLanguage(lang: BundledLanguage): Promise<void> {
+export async function loadBundledLanguage(
+  lang: BundledLanguage,
+  aliases?: string[]
+): Promise<void> {
   const highlighter = await getHighlighter();
   const langModule = await bundledLanguages[lang]();
-  // Type assertion needed because bundledLanguages returns module format
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  await highlighter.loadLanguage(langModule as any);
+
+  // If aliases provided, merge them with existing aliases
+  if (aliases && aliases.length > 0) {
+    // Type assertion needed because bundledLanguages returns module format
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const moduleLang = langModule as any;
+    await highlighter.loadLanguage({
+      ...moduleLang,
+      aliases: [...(moduleLang.aliases || []), ...aliases],
+    });
+  } else {
+    // Type assertion needed because bundledLanguages returns module format
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await highlighter.loadLanguage(langModule as any);
+  }
 }
 
 /**

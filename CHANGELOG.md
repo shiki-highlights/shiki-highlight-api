@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **New Function**: `loadBundledLanguage()` for easier loading of Shiki bundled languages
   - Simpler API than importing and calling `bundledLanguages` directly
+  - Supports optional aliases parameter: `await loadBundledLanguage('python', ['py3'])`
   - Example: `await loadBundledLanguage('python')`
   - Works seamlessly with existing singleton pattern
 - **Concurrency Tests**: Added comprehensive test suite for singleton behavior
