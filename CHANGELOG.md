@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-03-14
+
+### Changed
+
+- **Shiki 4 support**: Updated peer dependency to accept Shiki 4.x alongside 3.x and 1.x
+- Dev dependency bumped to `shiki@^4.0.0`
+- All 145 tests pass against Shiki 4 with no code changes — the core APIs (`createHighlighter`, `loadLanguage`, `codeToTokens`, `codeToHast`, `codeToHtml`) are unchanged
+
 ## [1.0.4] - 2025-11-13
 
 ### Fixed
