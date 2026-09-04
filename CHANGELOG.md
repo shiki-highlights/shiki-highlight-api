@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-09-04
+
+### Added
+
+- **`loadBundledTheme(theme)`**: preload a bundled Shiki theme. Optional — `codeToHighlightHtml` now loads whatever theme it is given.
+
+### Fixed
+
+- **The `theme` option finally works.** The shared highlighter was created with `themes: ['dark-plus']` and no way to add another, so every other bundled name threw `Theme \`x\` not found`. Themes are now loaded on demand, exactly as languages already were.
+
+  This matters more here than for a highlighter that writes colours inline: colours come out as a stylesheet, so a page can render the same code under two themes and pick between them in CSS — a light listing and a dark one, no client-side re-highlighting.
+
+- **Corrected the Shiki peer range to `>=1.9.0`.** It said `>=1.0.0`, and that was never true: this package calls `createHighlighter`, which Shiki did not have until 1.9.0. On 1.0.0 the suite fails 64 of 152 tests with `createHighlighter is not a function`.
+
+  Nothing is being dropped — Shiki 1.0.0 through 1.8.x has never worked with this package. The manifest now says what was always the case. The 1.1.0 note below, claiming support "alongside 3.x and 1.x", was accurate about 3.x and wrong about 1.x.
+
+### Changed
+
+- New CI job `peer-floor` installs the lowest Shiki the manifest claims to support and runs the suite against it. CI otherwise only ever saw the newest version the lockfile allowed, which is how the range stayed wrong. The job reads the floor out of `package.json` rather than repeating it, so the two cannot drift apart.
+
+### Security
+
+- Overrode `esbuild` to `^0.28.1` for [GHSA-g7r4-m6w7-qqqr](https://github.com/advisories/GHSA-g7r4-m6w7-qqqr) (Low; arbitrary file read via the dev server, on Windows). Development-only — esbuild arrives via `tsup` and `vite`, and `npm audit --omit=dev` was already clean, so no consumer of this package was affected. `tsup@8.5.1` still pins `esbuild ^0.27.0`, so an override was the only route; remove it when tsup widens to `^0.28`.
+
+### Internal
+
+- Dependency sweep: everything the existing ranges already allowed, including `shiki` 4.0.2 → 4.4.3 for development.
+- ESLint 10; npm reports 9.39.x as no longer supported.
+- Removed `jsdom` and `happy-dom`. Neither was imported or configured — `vitest.config.mts` sets `environment: 'node'` and the browser suite runs in real Chromium under Playwright.
+
+## [1.1.1] - 2026-03-14
+
+### Changed
+
+- Publishing moved to npm trusted publishing (OIDC), and the release workflow to Node 24.
+
 ## [1.1.0] - 2026-03-14
 
 ### Changed
