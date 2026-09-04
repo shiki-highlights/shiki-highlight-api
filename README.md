@@ -252,6 +252,27 @@ const result = await codeToHighlightHtml(code, {
 });
 ```
 
+## Themes
+
+Pass any bundled Shiki theme name. It is loaded the first time it is asked for,
+so nothing needs setting up in advance:
+
+```typescript
+const light = await codeToHighlightHtml(code, { lang: 'javascript', theme: 'light-plus' });
+const dark = await codeToHighlightHtml(code, { lang: 'javascript', theme: 'dark-plus' });
+```
+
+Because the colours arrive as a stylesheet rather than inline on each token, a
+page can render both and choose between them in CSS — one highlight pass per
+theme, no client-side re-highlighting:
+
+```typescript
+await Promise.all([loadBundledTheme('light-plus'), loadBundledTheme('dark-plus')]);
+```
+
+`loadBundledTheme` is optional. Use it to pay the loading cost up front, or to
+fail early on a name that does not exist.
+
 ## Custom Languages
 
 Load custom TextMate grammars:
@@ -280,7 +301,7 @@ Generate syntax-highlighted HTML using CSS Custom Highlight API.
 - `code` (string): Source code to highlight
 - `options` (object):
   - `lang` (string, required): Language identifier (e.g., `'javascript'`, `'python'`)
-  - `theme` (string, optional): Shiki theme name (default: `'dark-plus'`)
+  - `theme` (string, optional): any bundled Shiki theme name (default: `'dark-plus'`). Loaded on demand — see [Themes](#themes).
   - `blockId` (string, optional): Unique block identifier (auto-generated if omitted)
   - `transformers` (ShikiTransformer[], optional): Custom Shiki transformers
   - `lineNumbers` (boolean | { start?: number }, optional): Enable line numbers
@@ -310,6 +331,17 @@ Generate traditional Shiki HTML for unsupported browsers.
 **Parameters:** Same as `codeToHighlightHtml()`
 
 **Returns:** Promise<string> (traditional Shiki HTML)
+
+### `loadBundledTheme(theme)`
+
+Preload a bundled Shiki theme. Optional — `codeToHighlightHtml` loads whatever
+theme it is given.
+
+**Parameters:**
+
+- `theme` (string): a bundled Shiki theme name
+
+**Returns:** Promise<void>
 
 ### `loadCustomLanguage(grammar)`
 
