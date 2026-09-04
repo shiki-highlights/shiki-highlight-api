@@ -1427,9 +1427,8 @@ describe('Integration tests', () => {
   });
 
   it('exports all public APIs', async () => {
-    const { codeToHighlightHtml, codeToHtmlFallback, loadCustomLanguage } = await import(
-      '../src/index'
-    );
+    const { codeToHighlightHtml, codeToHtmlFallback, loadCustomLanguage } =
+      await import('../src/index');
 
     expect(typeof codeToHighlightHtml).toBe('function');
     expect(typeof codeToHtmlFallback).toBe('function');
