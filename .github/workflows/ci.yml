@@ -35,6 +35,46 @@ jobs:
       - name: Build
         run: npm run build
 
+  # shiki is a peerDependency, so consumers choose the version. CI otherwise
+  # only ever sees whatever the lockfile resolves to — the newest allowed — and
+  # the bottom of the declared range goes untested. It was wrong for a long
+  # time: the range said >=1.0.0 while the code calls createHighlighter, which
+  # shiki did not have until 1.9.0. This job installs the floor named in
+  # package.json and runs the suite against it, so the claim has to stay true.
+  peer-floor:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Read the lowest shiki the package claims to support
+        id: floor
+        run: |
+          VERSION=$(node -p "require('./package.json').peerDependencies.shiki.replace(/[^0-9.].*?([0-9])/, '\$1')")
+          echo "Declared peer range floor: $VERSION"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Install that version of shiki
+        run: npm install --no-save shiki@${{ steps.floor.outputs.version }}
+
+      - name: Confirm it is the version under test
+        run: |
+          INSTALLED=$(node -p "require('shiki/package.json').version")
+          echo "shiki installed: $INSTALLED"
+          test "$INSTALLED" = "${{ steps.floor.outputs.version }}"
+
+      - name: Run unit tests
+        run: npm run test:unit
+
   lint:
     runs-on: ubuntu-latest
 
