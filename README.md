@@ -35,8 +35,13 @@ The [CSS Custom Highlight API](https://developer.mozilla.org/en-US/docs/Web/API/
 ## Installation
 
 ```bash
-npm install shiki-highlight-api
+npm install shiki-highlight-api shiki
 ```
+
+Shiki is a peer dependency, so you choose the version. **1.9.0 or newer** — that
+is where `createHighlighter` arrived, and this package calls it. CI installs
+exactly that floor and runs the suite against it on every change, so the
+requirement stays honest rather than aspirational.
 
 ## Quick Start
 
