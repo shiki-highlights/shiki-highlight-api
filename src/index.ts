@@ -9,7 +9,9 @@
 import {
   createHighlighter,
   bundledLanguages,
+  bundledThemes,
   type BundledLanguage,
+  type BundledTheme,
   type Highlighter,
   type LanguageRegistration,
   type ShikiTransformer,
@@ -119,6 +121,7 @@ export async function codeToHighlightHtml(
 
   // Get highlighter instance
   const highlighter = await getHighlighter();
+  await ensureTheme(highlighter, theme);
 
   // Build transformers from options
   const transformers = buildTransformers(options);
@@ -180,6 +183,45 @@ export async function codeToHighlightHtml(
 export async function loadCustomLanguage(grammar: LanguageRegistration): Promise<void> {
   const highlighter = await getHighlighter();
   await highlighter.loadLanguage(grammar);
+}
+
+/**
+ * Load a bundled theme into the shared highlighter if it is not already there.
+ *
+ * The highlighter starts with `dark-plus` alone, so any other theme name passed
+ * to `codeToHighlightHtml` used to throw "Theme `x` not found". Languages were
+ * already loaded on demand; themes now behave the same way.
+ *
+ * A name Shiki does not bundle is left to Shiki to reject, with its own message.
+ */
+async function ensureTheme(highlighter: Highlighter, theme: string): Promise<void> {
+  if (highlighter.getLoadedThemes().includes(theme)) return;
+
+  const load = bundledThemes[theme as BundledTheme];
+  if (!load) return;
+
+  await highlighter.loadTheme(await load());
+}
+
+/**
+ * Preload a bundled theme.
+ *
+ * Calling this is optional — `codeToHighlightHtml` loads whatever theme it is
+ * given. Use it to pay the loading cost up front, or to fail early on a name
+ * that turns out not to exist.
+ *
+ * @param theme - The bundled theme to load
+ *
+ * @example
+ * ```typescript
+ * // A page that renders both, and picks between them in CSS
+ * await loadBundledTheme('light-plus');
+ * await loadBundledTheme('dark-plus');
+ * ```
+ */
+export async function loadBundledTheme(theme: BundledTheme): Promise<void> {
+  const highlighter = await getHighlighter();
+  await ensureTheme(highlighter, theme);
 }
 
 /**
@@ -517,9 +559,11 @@ function generateId(): string {
  */
 export async function codeToHtmlFallback(code: string, options: HighlightOptions): Promise<string> {
   const highlighter = await getHighlighter();
+  const theme = options.theme || 'dark-plus';
+  await ensureTheme(highlighter, theme);
   return highlighter.codeToHtml(code, {
     lang: options.lang as BundledLanguage,
-    theme: options.theme || 'dark-plus',
+    theme,
   });
 }
 
