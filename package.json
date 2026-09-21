@@ -70,7 +70,7 @@
     "@types/node": "^25.5.0",
     "@types/unist": "^3.0.3",
     "@vitest/coverage-v8": "^4.0.8",
-    "@vitest/ui": "^4.0.7",
+    "@vitest/ui": "^5.0.1",
     "eslint": "^10.9.1",
     "eslint-config-prettier": "^10.1.8",
     "playwright": "^1.56.1",
