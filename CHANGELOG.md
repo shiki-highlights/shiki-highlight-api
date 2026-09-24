@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-09-24
+
+### Added
+
+- **`tokenizeTimeLimit` option** for `codeToHighlightHtml`, passed through to Shiki. Shiki stops tokenising a line after 500 ms by default and leaves the rest of it as one uncoloured token. The limit is wall-clock time, so a busy machine can hit it on a short line, and the output then depends on load rather than on the code. Pass `0` to switch the limit off.
+
+  Found in a static-site build that highlights every listing twice (once per theme) and compares the passes: on a heavily loaded machine the two passes occasionally disagreed about where a line's tokens ended, a different listing each time. The default is unchanged, so existing callers behave exactly as before.
+
 ## [1.2.0] - 2026-09-04
 
 ### Added

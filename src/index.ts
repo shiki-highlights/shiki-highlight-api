@@ -83,6 +83,13 @@ export interface HighlightOptions {
   theme?: string;
   /** Optional unique block ID (auto-generated if omitted) */
   blockId?: string;
+  /**
+   * Milliseconds Shiki may spend tokenising one line before it gives up and
+   * leaves the rest of the line uncoloured (Shiki's default: 500). Pass 0 for
+   * no limit. The limit is wall-clock time, so on a busy machine even a short
+   * line can hit it; a build that must colour every line should pass 0.
+   */
+  tokenizeTimeLimit?: number;
 
   // Transformer support
   /** Shiki transformers for custom code processing */
@@ -117,7 +124,8 @@ export async function codeToHighlightHtml(
   code: string,
   options: HighlightOptions
 ): Promise<HighlightResult> {
-  const { lang, theme = 'dark-plus', blockId = generateId() } = options;
+  const { lang, theme = 'dark-plus', blockId = generateId(), tokenizeTimeLimit } = options;
+  const tokenizeOptions = tokenizeTimeLimit === undefined ? {} : { tokenizeTimeLimit };
 
   // Get highlighter instance
   const highlighter = await getHighlighter();
@@ -134,6 +142,7 @@ export async function codeToHighlightHtml(
         lang: lang as BundledLanguage,
         theme,
         transformers,
+        ...tokenizeOptions,
       });
       metadata = extractMetadata(hast);
     } catch (error) {
@@ -146,6 +155,7 @@ export async function codeToHighlightHtml(
   const tokens = highlighter.codeToTokens(code, {
     lang: lang as BundledLanguage,
     theme,
+    ...tokenizeOptions,
   });
 
   // Generate HTML with optional metadata

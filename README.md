@@ -308,6 +308,7 @@ Generate syntax-highlighted HTML using CSS Custom Highlight API.
   - `lang` (string, required): Language identifier (e.g., `'javascript'`, `'python'`)
   - `theme` (string, optional): any bundled Shiki theme name (default: `'dark-plus'`). Loaded on demand — see [Themes](#themes).
   - `blockId` (string, optional): Unique block identifier (auto-generated if omitted)
+  - `tokenizeTimeLimit` (number, optional): Milliseconds Shiki may spend on one line before leaving the rest of it uncoloured (Shiki's default: 500). Pass `0` for no limit, as a build that must colour every line should
   - `transformers` (ShikiTransformer[], optional): Custom Shiki transformers
   - `lineNumbers` (boolean | { start?: number }, optional): Enable line numbers
   - `highlightLines` (number[] | string, optional): Lines to highlight (e.g., `[1,3,5]` or `'1,3,5-7'`)
