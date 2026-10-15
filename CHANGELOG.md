@@ -5,13 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.0.0] - 2026-10-15
 
 ### Changed
 
 - **Breaking:** require Node.js 24 or newer; test on Node.js 24 and 26.
+- Replace tsup with tsdown, enable TypeScript 6, and verify installed ESM/CommonJS packages and declarations before publishing.
 - Update Vitest to 5, refresh development dependencies and GitHub Actions, and retain all existing test and build checks.
-- Resolve known dependency advisories. Keep TypeScript 5.9.3 until the declaration bundler supports newer compilers.
+- Resolve known dependency advisories and remove the obsolete esbuild override.
 
 ## [1.3.0] - 2026-09-24
 

@@ -9,7 +9,7 @@ export default tseslint.config(
   {
     languageOptions: {
       parserOptions: {
-        projectService: true,
+        projectService: { allowDefaultProject: ['scripts/verify-package.mjs'] },
         tsconfigRootDir: import.meta.dirname,
       },
     },

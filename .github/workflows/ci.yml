@@ -35,6 +35,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Verify packed package interfaces
+        run: npm run test:package
+
   # shiki is a peerDependency, so consumers choose the version. CI otherwise
   # only ever sees whatever the lockfile resolves to — the newest allowed — and
   # the bottom of the declared range goes untested. It was wrong for a long

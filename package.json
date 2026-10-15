@@ -1,6 +1,6 @@
 {
   "name": "shiki-highlight-api",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "High-performance syntax highlighting using CSS Custom Highlight API (87% fewer DOM nodes)",
   "keywords": [
     "shiki",
@@ -40,8 +40,8 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
-    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
     "test": "npm run test:unit && npm run test:browser",
     "test:unit": "vitest run",
     "test:browser": "playwright test",
@@ -54,7 +54,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepublishOnly": "npm run build && npm test"
+    "prepublishOnly": "npm run build && npm test && npm run test:package",
+    "test:package": "node scripts/verify-package.mjs"
   },
   "dependencies": {
     "hast-util-to-string": "^3.0.1",
@@ -76,12 +77,9 @@
     "playwright": "^1.64.1",
     "prettier": "^3.9.10",
     "shiki": "^4.5.0",
-    "tsup": "^8.5.1",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "typescript-eslint": "^8.71.2",
-    "vitest": "^5.0.4"
-  },
-  "overrides": {
-    "esbuild": "^0.28.2"
+    "vitest": "^5.0.4",
+    "tsdown": "^0.23.1"
   }
 }
