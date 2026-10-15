@@ -22,7 +22,7 @@
     "url": "https://github.com/shiki-highlights/shiki-highlight-api/issues"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=24.0.0"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -57,31 +57,31 @@
     "prepublishOnly": "npm run build && npm test"
   },
   "dependencies": {
-    "hast-util-to-string": "^3.0.0",
-    "unist-util-visit": "^5.0.0"
+    "hast-util-to-string": "^3.0.1",
+    "unist-util-visit": "^5.1.0"
   },
   "peerDependencies": {
     "shiki": ">=1.9.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@playwright/test": "^1.56.1",
-    "@types/hast": "^3.0.4",
-    "@types/node": "^25.5.0",
+    "@playwright/test": "^1.64.1",
+    "@types/hast": "^3.0.5",
+    "@types/node": "^24.19.2",
     "@types/unist": "^3.0.3",
-    "@vitest/coverage-v8": "^4.0.8",
-    "@vitest/ui": "^4.0.7",
-    "eslint": "^10.9.1",
+    "@vitest/coverage-v8": "^5.0.4",
+    "@vitest/ui": "^5.0.4",
+    "eslint": "^10.12.0",
     "eslint-config-prettier": "^10.1.8",
-    "playwright": "^1.56.1",
-    "prettier": "^3.6.2",
-    "shiki": "^4.0.2",
-    "tsup": "^8.0.0",
-    "typescript": "^5.0.0",
-    "typescript-eslint": "^8.46.3",
-    "vitest": "^4.0.7"
+    "playwright": "^1.64.1",
+    "prettier": "^3.9.10",
+    "shiki": "^4.5.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.71.2",
+    "vitest": "^5.0.4"
   },
   "overrides": {
-    "esbuild": "^0.28.1"
+    "esbuild": "^0.28.2"
   }
 }
