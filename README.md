@@ -34,6 +34,8 @@ The [CSS Custom Highlight API](https://developer.mozilla.org/en-US/docs/Web/API/
 
 ## Installation
 
+Requires Node.js 24 or newer.
+
 ```bash
 npm install shiki-highlight-api shiki
 ```
